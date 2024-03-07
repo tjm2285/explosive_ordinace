@@ -35,6 +35,16 @@ public struct GridVisualizations
         colorsBuffer = new ComputeBuffer(instanceCount, 3 * 4);
         material.SetBuffer(positionsId, positionsBuffer);
         material.SetBuffer(colorsId, colorsBuffer);
+
+        new InitializeVisualizationJob
+        {
+            positions = positions,
+            colors = colors,
+            rows = grid.Rows,
+            columns = grid.Columns
+        }.ScheduleParallel(grid.CellCount, grid.Columns, default).Complete();
+        positionsBuffer.SetData(positions);
+        colorsBuffer.SetData(colors);
     }
 
     public void Dispose()
