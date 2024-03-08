@@ -35,6 +35,8 @@ public struct Grid
         states = new NativeArray<CellState>(Rows * Columns, Allocator.Persistent);
     }
 
+
+
     public void Dispose () => states.Dispose();
 
 
