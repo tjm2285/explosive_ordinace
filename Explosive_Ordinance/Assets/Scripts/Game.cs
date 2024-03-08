@@ -54,14 +54,15 @@ public class Game : MonoBehaviour
             OnEnable();
         }
 
-        if (PerformAction())
+        /*if (PerformAction())
         {
             visualization.Update();
-        }
+        }*/
+        PerformAction();        
         visualization.Draw();
     }
 
-    bool PerformAction()
+    void PerformAction()
     {
         bool revealAction = Input.GetMouseButtonDown(0);
         bool markAction = Input.GetMouseButtonDown(1);
@@ -77,18 +78,23 @@ public class Game : MonoBehaviour
             {
                 StartNewGame();
             }
-            return revealAction ? DoRevealAction(cellIndex) : DoMarkAction(cellIndex); 
+            if (revealAction)
+            {
+                DoRevealAction(cellIndex);
+            }
+            else
+            {
+                DoMarkAction(cellIndex);
+            }
         }
-
-        return false;
     }
 
-    bool DoMarkAction(int cellIndex)
+    void DoMarkAction(int cellIndex)
     {
         CellState state = grid[cellIndex];
         if (state.Is(CellState.Revealed))
         {
-            return false;
+            return;
         }
 
         if (state.IsNot(CellState.Marked))
@@ -108,15 +114,15 @@ public class Game : MonoBehaviour
         }
 
         minesText.SetText("{0}", mines - markedSureCount);
-        return true;
+        
     }
 
-    bool DoRevealAction(int cellIndex)
+    void DoRevealAction(int cellIndex)
     {
         CellState state = grid[cellIndex];
         if (state.Is(CellState.MarkedOrRevealed))
         {
-            return false;
+            return;
         }
                 
         grid.Reveal(cellIndex);
@@ -130,7 +136,6 @@ public class Game : MonoBehaviour
         {
             isGameOver = true;
             minesText.SetText("SUCCESS");
-        }
-        return true;
+        }        
     }
 }
