@@ -14,6 +14,16 @@ public struct Grid
         set => states[i] = value;
     }
 
+    public int HiddenCellCount => CellCount - RevealedCellCount;
+
+    public int RevealedCellCount
+    {
+        get => revealedCellCount[0];
+        set => revealedCellCount[0] = value;
+    }
+
+    NativeArray<int> revealedCellCount;
+
     NativeArray<CellState> states;
     public int GetCellIndex(int row, int column) => row * Columns + column;
     public bool TryGetCellIndex(int row, int column, out int index)
@@ -32,6 +42,7 @@ public struct Grid
     {
         Rows = rows; 
         Columns = columns;
+        revealedCellCount = new NativeArray<int>(1, Allocator.Persistent);
         states = new NativeArray<CellState>(Rows * Columns, Allocator.Persistent);
     }
 
@@ -51,8 +62,15 @@ public struct Grid
         GetRowColumn(index, out job.startRowColumn.x, out job.startRowColumn.y);
         job.Schedule().Complete();
     }
-
-    public void Dispose () => states.Dispose();
+    public void RevealMinesAndMistakes() => new RevealMinesAndMistakesJob
+    {
+        grid = this
+    }.ScheduleParallel(CellCount, Columns, default).Complete();
+    public void Dispose()
+    {
+        revealedCellCount.Dispose();
+        states.Dispose();
+    }
 
 
 }
