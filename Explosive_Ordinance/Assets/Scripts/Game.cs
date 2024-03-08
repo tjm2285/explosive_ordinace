@@ -11,15 +11,25 @@ public class Game : MonoBehaviour
     [SerializeField, Min(1)]
     int rows = 8, columns = 21;
 
+    [SerializeField]
+    Material material;
+
+    [SerializeField]
+    Mesh mesh;
+
+    GridVisualizations visualization;
+
     Grid grid;
     void OnEnable()
     {
         grid.Initialize(rows, columns);
+        visualization.Initialize(grid, material, mesh);
     }
 
     void OnDisable()
     {
         grid.Dispose();
+        visualization.Dispose();
     }
 
     void Update()
@@ -29,5 +39,8 @@ public class Game : MonoBehaviour
             OnDisable();
             OnEnable();
         }
+
+        visualization.Update();
+        visualization.Draw();
     }
 }
