@@ -11,6 +11,11 @@ public struct GridVisualizations
         positionsId = Shader.PropertyToID("_Positions"),
         colorsId = Shader.PropertyToID("_Colors");
 
+    public const int
+        RowsPerCell = 7,
+        ColumnsPerCell = 5,
+        blocksPerCell = RowsPerCell * ColumnsPerCell;
+
     ComputeBuffer positionsBuffer, colorsBuffer;
 
     NativeArray<float3> positions, colors;
@@ -27,7 +32,7 @@ public struct GridVisualizations
         this.material = material;
         this.mesh = mesh;
 
-        int instanceCount = grid.CellCount;
+        int instanceCount = grid.CellCount * blocksPerCell;
         positions = new NativeArray<float3>(instanceCount, Allocator.Persistent);
         colors = new NativeArray<float3>(instanceCount, Allocator.Persistent);
 
