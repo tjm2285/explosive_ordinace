@@ -74,10 +74,7 @@ public struct GridVisualizations
         float z = p.z + RowsPerCell / 2f + 1.5f;
         z /= RowsPerCell + 1;
         z += (grid.Rows - 1) * 0.5f + (c & 1) * 0.5f - 0.25f;
-        int r = Mathf.FloorToInt(z);
-        Debug.Log(grid.TryGetCellIndex(r, c, out cellIndex));
-        Debug.Log(x - c > 1f / (ColumnsPerCell + 1));
-        Debug.Log(z - r > 1f / (RowsPerCell + 1));
+        int r = Mathf.FloorToInt(z);        
 
         return grid.TryGetCellIndex(r, c, out cellIndex) && x - c > 1f / (ColumnsPerCell + 1) && z - r > 1f / (RowsPerCell + 1) ;
     }

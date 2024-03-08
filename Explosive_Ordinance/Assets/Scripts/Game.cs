@@ -55,18 +55,17 @@ public class Game : MonoBehaviour
 
     bool PerformAction()
     {
+        bool revealAction = Input.GetMouseButtonDown(0);
         bool markAction = Input.GetMouseButtonDown(1);
-        Debug.Log(markAction);
+        
         if (
-            markAction &&
+            (revealAction || markAction) &&
             visualization.TryGetHitCellIndex(
                 Camera.main.ScreenPointToRay(Input.mousePosition), out int cellIndex
             )
         )
-        {
-            Debug.Log(cellIndex);
-            grid[cellIndex] = CellState.MarkedSure;
-            return DoMarkAction(cellIndex); 
+        {   
+            return revealAction ? DoRevealAction(cellIndex) : DoMarkAction(cellIndex); 
         }
 
         return false;
@@ -97,6 +96,18 @@ public class Game : MonoBehaviour
         }
 
         minesText.SetText("{0}", mines - markedSureCount);
+        return true;
+    }
+
+    bool DoRevealAction(int cellIndex)
+    {
+        CellState state = grid[cellIndex];
+        if (state.Is(CellState.MarkedOrRevealed))
+        {
+            return false;
+        }
+
+        grid[cellIndex] = state.With(CellState.Revealed);
         return true;
     }
 }
