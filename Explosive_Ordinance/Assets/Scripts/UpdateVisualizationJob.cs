@@ -60,7 +60,7 @@ struct UpdateVisualizationJob : IJobFor
     public void Execute(int i)
     {
         int blockOffset = i * GridVisualizations.blocksPerCell;
-        int symbolIndex = GetSymbolIndex(grid[i]);
+        int symbolIndex = GetSymbolIndex(grid[i]);        
         ulong bitmap = bitmaps[symbolIndex];
         float3 coloration = colorations[symbolIndex];
 

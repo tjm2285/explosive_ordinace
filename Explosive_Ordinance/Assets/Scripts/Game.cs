@@ -23,15 +23,23 @@ public class Game : MonoBehaviour
 
     int markedSureCount;
 
+    bool isGameOver;
+
     void OnEnable()
     {
         grid.Initialize(rows, columns);
         visualization.Initialize(grid, material, mesh);
+        StartNewGame();
+    }
+
+    void StartNewGame()
+    {
+        isGameOver = false;
         mines = Mathf.Min(mines, grid.CellCount);
         minesText.SetText("{0}", mines);
         markedSureCount = 0;
+        grid.PlaceMines(mines);
     }
-
     void OnDisable()
     {
         grid.Dispose();
@@ -64,7 +72,11 @@ public class Game : MonoBehaviour
                 Camera.main.ScreenPointToRay(Input.mousePosition), out int cellIndex
             )
         )
-        {   
+        {
+            if (isGameOver)
+            {
+                StartNewGame();
+            }
             return revealAction ? DoRevealAction(cellIndex) : DoMarkAction(cellIndex); 
         }
 
@@ -106,8 +118,19 @@ public class Game : MonoBehaviour
         {
             return false;
         }
-
-        grid[cellIndex] = state.With(CellState.Revealed);
+                
+        grid.Reveal(cellIndex);
+        if (state.Is(CellState.Mine))
+        {
+            isGameOver = true;
+            minesText.SetText("FAILURE");
+            grid.RevealMinesAndMistakes();
+        }
+        else if (grid.HiddenCellCount == mines)
+        {
+            isGameOver = true;
+            minesText.SetText("SUCCESS");
+        }
         return true;
     }
 }
