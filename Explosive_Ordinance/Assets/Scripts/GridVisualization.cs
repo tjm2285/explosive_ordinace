@@ -51,7 +51,17 @@ public struct GridVisualizations
         positionsBuffer.SetData(positions);
         colorsBuffer.SetData(colors);
     }
-
+    public void Update()
+    {
+        new UpdateVisualizationJob
+        {
+            positions = positions,
+            colors = colors,
+            grid = grid
+        }.ScheduleParallel(grid.CellCount, grid.Columns, default).Complete();
+        positionsBuffer.SetData(positions);
+        colorsBuffer.SetData(colors);
+    }
     public void Dispose()
     {
         positions.Dispose();

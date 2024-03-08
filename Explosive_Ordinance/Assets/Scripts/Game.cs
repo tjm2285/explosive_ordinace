@@ -39,6 +39,8 @@ public class Game : MonoBehaviour
             OnDisable();
             OnEnable();
         }
+
+        visualization.Update();
         visualization.Draw();
     }
 }
