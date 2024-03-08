@@ -42,6 +42,16 @@ public struct Grid
         seed = Random.Range(1, int.MaxValue)
     }.Schedule().Complete();
 
+    public void Reveal(int index)
+    {
+        var job = new RevealRegionJob
+        {
+            grid = this
+        };
+        GetRowColumn(index, out job.startRowColumn.x, out job.startRowColumn.y);
+        job.Schedule().Complete();
+    }
+
     public void Dispose () => states.Dispose();
 
 

@@ -108,7 +108,8 @@ public class Game : MonoBehaviour
             return false;
         }
 
-        grid[cellIndex] = state.With(CellState.Revealed);
+        //grid[cellIndex] = state.With(CellState.Revealed);
+        grid.Reveal(cellIndex);
         return true;
     }
 }
