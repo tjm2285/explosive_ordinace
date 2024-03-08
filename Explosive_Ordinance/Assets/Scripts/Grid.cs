@@ -35,7 +35,12 @@ public struct Grid
         states = new NativeArray<CellState>(Rows * Columns, Allocator.Persistent);
     }
 
-
+    public void PlaceMines(int mines) => new PlaceMinesJob
+    {
+        grid = this,
+        mines = mines,
+        seed = Random.Range(1, int.MaxValue)
+    }.Schedule().Complete();
 
     public void Dispose () => states.Dispose();
 

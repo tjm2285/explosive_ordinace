@@ -30,6 +30,7 @@ public class Game : MonoBehaviour
         mines = Mathf.Min(mines, grid.CellCount);
         minesText.SetText("{0}", mines);
         markedSureCount = 0;
+        grid.PlaceMines(mines);        
     }
 
     void OnDisable()
